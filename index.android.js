@@ -3,13 +3,12 @@
  * https://github.com/facebook/react-native
  */
 'use strict';
-import React, {
+
+var React = require('react-native');
+var {
   AppRegistry,
-  Component,
-  StyleSheet,
-  Text,
   View
-} from 'react-native';
+} = React;
 
 class ZeroHedge extends Component {
   render() {
