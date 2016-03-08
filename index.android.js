@@ -14,11 +14,13 @@ import React, {
   StatusBar,
   Navigator,
   TextInput,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  ListView,
+  ProgressBarAndroid,
 } from 'react-native';
 
 
-//var TimerMixin = require('react-timer-mixin');
+var TimerMixin = require('react-timer-mixin');
 
 var API_URL = 'http://www.take5people.cn/ZeroHedge/api/search/';
 var LOADING = {};
@@ -60,7 +62,55 @@ var BGWASH = 'rgba(255,255,255,0.8)';
 var DISABLED_WASH = 'rgba(255,255,255,0.25)';
 
 class SearchBar extends Component {
+
+  render() {
+    return (
+      <View style={styles.listView.searchBar}>
+        <TextInput
+          autoCapitalize='none'
+          autoCorrect={false}
+          placeholder='Search for Zero Hedge stories...'
+          returnKeyType='search'
+          enablesReturnKeyAutomatically={true}
+          style={styles.listView.searchBarInput}
+          onChange={this.props.onSearch}
+          onEndEditing={this.props.onEndEditing}
+          onSubmitEditing={this.props.onSubmitEditing}
+        />
+
+        
+
+      </View>
+
+    )
+  }
+}
+
+class StoriesListView extends Component {
   timeoutID = (null: any);
+  
+
+  constructor(props, context) {
+    super(props, context);
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.state = {
+      isLoading: false,
+      query: '',
+      dataSource: ds.cloneWithRows(['row 1', 'row 2']),
+      resultsData: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1 != row2
+      }),  
+    };
+  };
+
+
+  componentDidMount() {
+    this.searchMedia('HSBC');
+  };
+  getDataSource(stories: Array<any>): ListView.DataSource{
+    return this.state.resultsData.cloneWithRows(stories);
+  }
+
   _urlForQuery(query: string) : string{
     if (query) {
       return API_URL + encodeURIComponent(query);
@@ -70,14 +120,41 @@ class SearchBar extends Component {
     }
   };
 
+
+  setSearchPostResult(responseData, query){
+
+    LOADING[query] = false;
+    console.log(responseData.length);
+    resultsCache.dataForQuery[query] = responseData;
+
+
+    this.state.isLoading = false;
+    this.state.resultsData = this.getDataSource(resultsCache.dataForQuery[query]);
+  };
+
+
   searchMedia(query:string){
     this.timeoutID = null;
+
+    this.state.query = query;
+
+
     var cachedResultsForQuery = resultsCache.dataForQuery[query];
     if (cachedResultsForQuery) {
       if (!LOADING[query]) {
-        return cachedResultsForQuery;
+        this.state.isLoading = false;
+        this.state.resultsData = this.getDataSource(cachedResultsForQuery);
+      } else {
+        this.state.isLoading = true;
       }
     } else{
+      var queryURL = this._urlForQuery(query);
+
+      if (!queryURL) return;
+
+      this.state.isLoading = true;
+
+
       LOADING[query] = true;
       resultsCache.dataForQuery[query] = null;
       var settings = {
@@ -88,50 +165,88 @@ class SearchBar extends Component {
         .catch((error) => {
           LOADING[query] = false;
           resultsCache.dataForQuery[query] = undefined;
+
+          this.state.isLoading = false;
+          this.state.resultsData = this.getDataSource([])
         })
-        .then((responseData) =>{
-          LOADING[query] = false;
-          console.log(responseData.length);
-          resultsCache.dataForQuery[query] = responseData;
-        })
+        .then((responseData) => {
+            this.setSearchPostResult(responseData, query);
+            console.log('On Submit Editing');
+          })
     }
   };
 
 
-
-  render() {
+  renderSeparator(
+    sectionID: number | string,
+    rowID: number | string,
+    adjacentRowHighlighted: boolean
+  ) {
     return (
-      <View style={styles.listView.searchBar}>
-        <TextInput
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder="Search for media on iTunes..."
-          returnKeyType="search"
-          enablesReturnKeyAutomatically={true}
-          style={styles.listView.searchBarInput}
-          onChange={this.props.onSearch}
-          onEndEditing={this.props.onEndEditing}
-          onSubmitEditing={(event) => {
-            console.log('On Submit Editing');
-            this.searchMedia(event.nativeEvent.text);
-          }}
-        />
-      </View>
-    )
-  }
-}
+      <View
+        key={"SEP_" + sectionID + "_" + rowID}
+        style={[styles.listView.rowSeparator, adjacentRowHighlighted && styles.listView.rowSeparatorHighlighted]}
+      />
+    );
+  };
 
-class StoriesListView extends Component {
-
+  renderRow(
+    story: Object,
+    sectionID: number | string,
+    rowID: number | string,
+    highlightRowFunction: (sectionID: ?number | string, rowID: ?number | string) => void,
+  ) {
+    return (
+      <Text>
+        {story.Title}
+      </Text>
+    );
+  };
 
   render() {
     return (
      
-        <View style={styles.global.content}>
-          <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a mi auctor urna sagittis lobortis id vel magna. Morbi mattis nibh maximus dui imperdiet, ut efficitur orci malesuada. Duis rhoncus dolor quis mi viverra, sed eleifend odio auctor. Nam vel consequat elit. Sed turpis orci, sodales vel eleifend eu, feugiat non arcu. Nam posuere mauris id consequat sollicitudin. Aliquam lacinia eros vitae condimentum finibus. Pellentesque sit amet massa tincidunt, hendrerit purus in, dictum ipsum. Phasellus interdum vitae arcu non pretium. Ut dictum turpis in neque luctus tincidunt.
-          </Text>
-        </View>    
+      <View style={styles.global.content}>
+        <SearchBar
+          onSearch={(event) => {
+            var searchString = event.nativeEvent.text;
+            console.log(searchString);
+          }}
+          onEndEditing={(event) => {
+            console.log('jkhkjhkj');
+            var searchString = event.nativeEvent.text;
+            console.log(searchString);
+          }}
+          onSubmitEditing={(event) => {
+            console.log('On Submit Editing');
+            var searchString = event.nativeEvent.text;
+            console.log('Input string ' + searchString);
+
+
+            //this.clearTimeout(this.timeoutID);
+            //this.timeoutID = this.setTimeout(() => this.searchMedia(searchString), 1000);  
+            this.searchMedia(searchString);                  
+          }}
+        />
+
+        <Text>hkjhkjhkhkjhkjhjkh</Text>
+        <Text>hkjhkjhkhkjhkjhjkh</Text>
+        <Text>hkjhkjhkhkjhkjhjkh</Text>
+        <Text>hkjhkjhkhkjhkjhjkh</Text>
+        <Text>hkjhkjhkhkjhkjhjkh</Text>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(rowData) => <Text>{rowData}</Text>}
+        />
+        
+        <ListView
+          dataSource={this.state.resultsData}
+          renderRow={this.renderRow}
+          renderSeparator={this.renderSeparator}
+          automaticallyAdjustContentInsets={false}
+          keyboardDismissMode='on-drag'
+        />
+      </View>
     )
   }
 }
@@ -176,33 +291,9 @@ class ZeroHedge extends Component {
               <StatusBar
                    backgroundColor='green'
                    barStyle='light-content'/>
-              <View style={styles.navbar.appearance}>
-                <SearchBar
-                  onSearch={(event) => {
-                    var searchString = event.nativeEvent.text;
-                    console.log(searchString);
-                  }}
-                  onEndEditing={(event) => {
-                    console.log('jkhkjhkj');
-                    var searchString = event.nativeEvent.text;
-                    console.log(searchString);
-                  }}
-                  onSubmitEditing={(event) => {
-                    console.log('On Submit Editing');
-                    var searchString = event.nativeEvent.text;
-                    console.log('Input string ' + searchString);
-
-
-                    //this.clearTimeout(this.timeoutID);
-                    //this.timeoutID = this.setTimeout(() => this.searchMedia(searchString), 1000);  
-                    searchMedia(searchString);                  
-                  }}
-                />
                 <TouchableWithoutFeedback onPress={this._handlePress}>
                   <Text style={styles.navbar.button}>Search</Text>
-                </TouchableWithoutFeedback>    
-                
-              </View>
+                </TouchableWithoutFeedback>
             </View>        
 
           } //navigationBar

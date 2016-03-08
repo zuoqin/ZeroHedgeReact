@@ -17,7 +17,7 @@ module.exports = StyleSheet.create({
   searchBarInput: {
     fontSize: 15,
     flex: 1,
-    height: 130,
+    height: 70,
   },
   spinner: {
     width: 30
