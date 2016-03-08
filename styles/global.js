@@ -7,10 +7,10 @@ import React, {
 
 export default StyleSheet.create({
   mainContainer: {
-    flex: 1
+    flex: 1,
   },
   content: {
-    backgroundColor: '#CCC',
-    flex: 1
+    flex: 1,
+    backgroundColor: '#EFEFEF',
   }
 });

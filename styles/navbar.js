@@ -7,22 +7,64 @@ import React, {
 
 module.exports = StyleSheet.create({
 
-  appearance: {
-  	backgroundColor: '#2A3744',
-  	paddingTop: 30,
-  	paddingBottom: 10,  	
-    flexDirection: 'row'
+  contentContainer: {
+    padding: 8
   },
-  title: {
-    color: '#FEFEFE',
-    textAlign: 'center',
+  mainSection: {
+    flexDirection: 'row',
+  },
+  separator: {
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    height: 1,
+    marginVertical: 8
+  },
+  sectionTitle: {
     fontWeight: 'bold',
-    flex: 1
+    marginBottom: 4
   },
-  button: {
-  	width: 50,
-  	color: '#FEFEFE',
-  	textAlign: 'center'
+  mediaTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8
+  },
+  mediaPriceRow: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  iTunesButton: {
+    backgroundColor: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+    borderRadius: 4,
+    color: '#666',
+    textAlign: 'center',
+    borderColor: '#666',
+    borderWidth: 1,
+    padding: 8
+  },
+  mediaPrice: {
+    color: '#666',
+    textAlign: 'right'
+  },
+  mediaGenre: {
+    fontStyle: 'italic'
+  },
+  contentAdvisory: {
+    fontFamily: 'Palatino',
+    fontWeight: '600',
+    fontSize: 16,
+    marginVertical: 4,
+  },
+  mediaImage: {
+    height: 100,
+    width: 100,
+    marginRight: 8,
+    resizeMode: 'contain',
+  },
+  mediaDescription: {
+    color: '#666',
+    textAlign: 'justify'
   }
 });
 
