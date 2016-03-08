@@ -92,14 +92,18 @@ class StoriesListView extends Component {
 
   constructor(props, context) {
     super(props, context);
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    var arr = [ {Body: "",
+      Introduction: "jhkjkjkja ...",Published: "01/26/2014 - 13:23",
+      Reference: "xhcmdlLWNhc2gtd2l0aGRyYXdhbC1saW1pdA==",
+      Title: "Furious Backlash Forces HSBC To Scrap Large Cash Withdrawal Limit",
+      Updated: "2016-03-08T15:55:12.2058442+08:00"} ];
+
+    this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       isLoading: false,
       query: '',
-      dataSource: ds.cloneWithRows(['row 1', 'row 2']),
-      resultsData: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 != row2
-      }),  
+      dataSource: this.ds.cloneWithRows(['row 3', 'row 4']),
+      resultsData: this.ds.cloneWithRows(['row 3', 'row 4'])
     };
   };
 
@@ -108,7 +112,8 @@ class StoriesListView extends Component {
     this.searchMedia('HSBC');
   };
   getDataSource(stories: Array<any>): ListView.DataSource{
-    return this.state.resultsData.cloneWithRows(stories);
+    this.setState({dataSource: this.ds.cloneWithRows(stories)});
+    return this.state.dataSource.cloneWithRows(stories);
   }
 
   _urlForQuery(query: string) : string{
@@ -196,9 +201,17 @@ class StoriesListView extends Component {
     rowID: number | string,
     highlightRowFunction: (sectionID: ?number | string, rowID: ?number | string) => void,
   ) {
+    var sTitle = '123456789012345';
+    var nLength = 15;
+    if(story.Title !== undefined) 
+    {
+      console.log('story title: ' + story.Title);
+      sTitle = story.Title;
+    }
+    nLength = sTitle.length;
     return (
       <Text>
-        {story.Title}
+        {sTitle.substring(0,nLength)}
       </Text>
     );
   };
@@ -229,23 +242,11 @@ class StoriesListView extends Component {
           }}
         />
 
-        <Text>hkjhkjhkhkjhkjhjkh</Text>
-        <Text>hkjhkjhkhkjhkjhjkh</Text>
-        <Text>hkjhkjhkhkjhkjhjkh</Text>
-        <Text>hkjhkjhkhkjhkjhjkh</Text>
-        <Text>hkjhkjhkhkjhkjhjkh</Text>
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={(rowData) => <Text>{rowData}</Text>}
+          renderRow={this.renderRow}
         />
         
-        <ListView
-          dataSource={this.state.resultsData}
-          renderRow={this.renderRow}
-          renderSeparator={this.renderSeparator}
-          automaticallyAdjustContentInsets={false}
-          keyboardDismissMode='on-drag'
-        />
       </View>
     )
   }
