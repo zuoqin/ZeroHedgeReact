@@ -17,34 +17,31 @@ var {
   ProgressBarAndroid,
 } = React;
 
-var styles = require('./styles').detailView;
-
+var styles = require('./styles');
+var StoriesListView = require('./stories-list-view');
 
 class StoryDetailView extends Component {
 
   render() {
     return (
-      <View>
-        <TouchableHighlight
-          onPress={this.props.onSelect}
-          onShowUnderlay={this.props.onHighlight}
-          onHideUnderlay={this.props.onDeHighlight}
-        >
-          <View style={styles.cellContainer}>
-            <Image
-              source={{uri: this.props.media.artworkUrl100}}
-              style={styles.cellImage}
-            />
-            <View style={styles.cellTextContainer}>
-              <Text style={styles.mediaName}>
-                {this.props.story.Introduction}
-              </Text>
-            </View>
-          </View>
-        </TouchableHighlight>
+      
+      <View style={styles.global.content}>
+        <TouchableWithoutFeedback onPress={this._handlePress1.bind(this)}>
+          <Text style={styles.navbar.button}>Search</Text>
+        </TouchableWithoutFeedback>
       </View>
     );
   }
+
+  _handlePress1() {
+    console.log('2222Ask me later pressed');
+    this.props.navigator.push({
+      title: 'Stories List',
+      component: StoriesListView,
+      id: 'StoriesList'
+    });
+  }  
+
 };
 
 module.exports = StoryDetailView;

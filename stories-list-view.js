@@ -26,8 +26,8 @@ var resultsCache = {
 };
 
 
-//var StoryIntroCell = require('./story-intro-cell');
-//var StoryDetailView = require('./story-detail-view');
+var StoryIntroCell = require('./story-intro-cell');
+var StoryDetailView = require('./story-detail-view');
 
 
 class SearchBar extends Component {
@@ -179,22 +179,25 @@ class StoriesListView extends Component {
     }
     nLength = sTitle.length;
     return (
-
-      <Text>
-        {sTitle.substring(0,nLength)}
-      </Text>      
+      <StoryIntroCell
+        story={story}
+        onSelect={() => this.selectMediaItem(story)}
+        onHighlight={() => highlightRowFunction(sectionID,rowID)}
+        onDeHighlight={() => highlightRowFunction(null,null)}
+      />  
     );
   };
 
-  // selectMediaItem(storyItem) {
-  //   this.props.navigator.push({
-  //     title: 'Media Details',
-  //     component: StoryDetailView,
-  //     passProps: {
-  //       storyItem
-  //     }
-  //   });
-  // };
+  selectMediaItem(storyItem) {
+    this.props.navigator.push({
+      title: 'Story Details',
+      component: StoryDetailView,
+      id: 'StoryDetail',
+      passProps: {
+        storyItem
+      }
+    });
+  };
 
   render() {
     return (
@@ -224,7 +227,7 @@ class StoriesListView extends Component {
 
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={this.renderRow}
+          renderRow={this.renderRow.bind(this)}
         />
         
       </View>

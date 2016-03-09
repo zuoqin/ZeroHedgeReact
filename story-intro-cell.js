@@ -58,8 +58,13 @@ class StoryIntroCell extends Component {
         <TouchableHighlight
           onPress={this.props.onSelect}
           onShowUnderlay={this.props.onHighlight}
-          onHideUnderlay={this.props.onDeHighlight}>
+          onHideUnderlay={this.props.onDeHighlight}
+        >
           <View style={styles.cellContainer}>
+            <Image
+              source={{uri: this.props.story.artworkUrl100}}
+              style={styles.cellImage}
+            />
             <View style={styles.cellTextContainer}>
               <Text style={styles.mediaName}>
                 {this.props.story.Introduction}

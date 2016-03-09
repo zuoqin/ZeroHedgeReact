@@ -19,7 +19,7 @@ import React, {
   ProgressBarAndroid,
 } from 'react-native';
 
-
+var StoryDetailView = require('./story-detail-view');
 
 const HTML = `
 <!DOCTYPE html>\n
@@ -60,6 +60,32 @@ var styles = require('./styles');
 
 
 class ZeroHedge extends Component {
+
+  _renderScene(route, navigator) {
+     var routeId = route.id;
+
+     if (routeId === 'StoriesList') {
+         return (
+          <StoriesListView
+            navigator={navigator}
+            title={route.title}
+            name={route.name}
+          /> 
+          );
+     }
+
+    if (routeId === 'StoryDetail') {
+         return (
+          <StoryDetailView
+            navigator={navigator}
+            title={route.title}
+            name={route.name}
+          /> 
+          );           
+    }
+  };
+
+
   render() {
     return (
       <Navigator
@@ -68,7 +94,8 @@ class ZeroHedge extends Component {
           <View style={styles.global.mainContent}>
             <StatusBar
                  backgroundColor='green'
-                 barStyle='light-content'/>
+                 barStyle='light-content'
+            />
             <TouchableWithoutFeedback onPress={this._handlePress}>
               <Text style={styles.navbar.button}>Search</Text>
             </TouchableWithoutFeedback>
@@ -77,32 +104,14 @@ class ZeroHedge extends Component {
         } //navigationBar
 
         initialRoute={{
-          name: 'My First Scene',
-          rightButtonTitle: 'Search',
-          index: 0
+          component: StoryDetailView,
+          name: 'Stories List',
+          title: 'ZeroHedge Stories',
+          id: 'StoryDetail'
         }}
 
         renderScene={(route, navigator) =>
-          <StoriesListView
-            title={route.title}
-            name={route.name}
-            onForward={() => {
-              var nextIndex = route.index + 1;
-              navigator.push({
-                name: 'Scene ' + nextIndex,
-                index: nextIndex,
-              });
-            }}
-            onBack={() => {
-
-
-
-
-              if (route.index > 0) {
-                navigator.pop();
-              }
-            }}
-          /> 
+          this._renderScene(route, navigator)
         }
       />
     );
