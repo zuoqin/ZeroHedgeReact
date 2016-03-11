@@ -10,6 +10,7 @@ export default StyleSheet.create({
     flex: 1,
   },
   content: {
+  	height: 8888,
     flex: 1,
     backgroundColor: '#EFEFEF',
   }

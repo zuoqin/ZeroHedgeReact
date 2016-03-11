@@ -48,7 +48,7 @@ var styles = StyleSheet.create({
   }
 });
 
-
+var BGWASH = 'rgba(255,255,255,0.8)';
 
 class StoryIntroCell extends Component {
 
@@ -61,14 +61,27 @@ class StoryIntroCell extends Component {
           onHideUnderlay={this.props.onDeHighlight}
         >
           <View style={styles.cellContainer}>
-            <Image
-              source={{uri: this.props.story.artworkUrl100}}
-              style={styles.cellImage}
-            />
+
             <View style={styles.cellTextContainer}>
-              <Text style={styles.mediaName}>
-                {this.props.story.Introduction}
-              </Text>
+              <WebView
+                style={{
+                  backgroundColor: BGWASH,
+                  height: 100,
+                }}
+                automaticallyAdjustContentInsets={false}
+                source={{html: this.props.story.Title}}
+                scalesPageToFit={true}
+              />              
+              <WebView
+                style={{
+                  backgroundColor: BGWASH,
+                  height: 100,
+                }}
+                automaticallyAdjustContentInsets={false}
+                source={{html: this.props.story.Introduction}}
+                scalesPageToFit={true}
+              />   
+
             </View>
           </View>
         </TouchableHighlight>

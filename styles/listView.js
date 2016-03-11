@@ -19,6 +19,17 @@ module.exports = StyleSheet.create({
     flex: 1,
     height: 70,
   },
+
+  navbarButton: {
+    width: 50,
+    color: '#000000',
+    textAlign: 'center'
+  },
+  
+  list: {
+    height: 1000
+  },
+
   spinner: {
     width: 30
   },
@@ -38,7 +49,10 @@ module.exports = StyleSheet.create({
   emptyListText: {
     marginTop: 80,
     color: '#999'
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#CCCCCC',
   }
-
 });
 
