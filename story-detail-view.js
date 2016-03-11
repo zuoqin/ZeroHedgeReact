@@ -33,7 +33,7 @@ class StoryDetailView extends Component {
           <WebView
             style={{
               backgroundColor: BGWASH,
-              height: 100,
+              height: 60,
             }}
             source={{html: this.props.passProps.storyItem.Title}}
             scalesPageToFit={true}
@@ -42,7 +42,7 @@ class StoryDetailView extends Component {
           <WebView
             style={{
               backgroundColor: BGWASH,
-              height: 3000,
+              height: 4000,
             }}
             automaticallyAdjustContentInsets={true}
             source={{html: this.props.passProps.storyItem.Body}}

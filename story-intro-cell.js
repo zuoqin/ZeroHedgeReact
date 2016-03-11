@@ -22,7 +22,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFF',
-    padding: 4
+    padding: 1
   },
   cellImage: {
     height: 80,
@@ -49,7 +49,7 @@ var styles = StyleSheet.create({
 });
 
 var BGWASH = 'rgba(255,255,255,0.8)';
-
+var WebContainer = require('./webcontainer');
 class StoryIntroCell extends Component {
 
   render() {
@@ -63,23 +63,20 @@ class StoryIntroCell extends Component {
           <View style={styles.cellContainer}>
 
             <View style={styles.cellTextContainer}>
-              <WebView
+              <WebContainer
                 style={{
                   backgroundColor: '#2E6DA4',
-                  height: 30,
+                  height: 30
                 }}
-                automaticallyAdjustContentInsets={false}
+                height={30}
                 source={{html: this.props.story.Title}}
-                scalesPageToFit={true}
               />              
               <WebView
                 style={{
                   backgroundColor: BGWASH,
-                  height: 100,
+                  height: 100
                 }}
-                automaticallyAdjustContentInsets={false}
                 source={{html: this.props.story.Introduction}}
-                scalesPageToFit={true}
               />   
 
             </View>

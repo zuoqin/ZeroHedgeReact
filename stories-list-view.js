@@ -11,6 +11,7 @@ import React, {
   Navigator,
   TextInput,
   TouchableHighlight,
+  TouchableNativeFeedback,
   TouchableWithoutFeedback,
   ListView,
   ScrollView,
@@ -56,19 +57,24 @@ class SearchBar extends Component {
   render() {
     return (
       <View style={styles.listView.searchBar}>
-        <TouchableWithoutFeedback onPress={this.props.onPage}>
+        <TouchableWithoutFeedback id={0} onPress={this.props.onPage.bind(this,0)}>
           <Text style={styles.listView.navbarButton}>Home</Text>
         </TouchableWithoutFeedback>      
-        <TouchableWithoutFeedback onPress={this.props.onPage}>
+        <TouchableWithoutFeedback id={1} onPress={this.props.onPage.bind(this,1)}>
           <Text style={styles.listView.navbarButton}>Page 1</Text>
         </TouchableWithoutFeedback>           
-        <TouchableWithoutFeedback onPress={this.props.onPage}>
+        <TouchableWithoutFeedback id={2} onPress={this.props.onPage.bind(this,2)}>
           <Text style={styles.listView.navbarButton}>Page 2</Text>
         </TouchableWithoutFeedback>   
-        <TouchableWithoutFeedback onPress={this.props.onPage}>
+        <TouchableWithoutFeedback id={3} onPress={this.props.onPage.bind(this,3)}>
           <Text style={styles.listView.navbarButton}>Page 3</Text>
         </TouchableWithoutFeedback>           
-
+        <TouchableWithoutFeedback id={4} onPress={this.props.onPage.bind(this,4)}>
+          <Text style={styles.listView.navbarButton}>Page 4</Text>
+        </TouchableWithoutFeedback>      
+        <TouchableWithoutFeedback id={5} onPress={this.props.onPage.bind(this,5)}>
+          <Text style={styles.listView.navbarButton}>Page 5</Text>
+        </TouchableWithoutFeedback>      
 
         <TextInput
           autoCapitalize='none'
@@ -398,27 +404,9 @@ class StoriesListView extends Component {
       <View>
        <SearchBar
           onPage = {(event) => {
-            //var searchString = event.nativeEvent.text;
-              switch(event.nativeEvent.target)
-              {
-                case 10:
-                  this.getPage(0);
-                  break;
-                case 13:
-                  this.getPage(1);
-                  break;
-                case 15:
-                  this.getPage(2);
-                  break;
-                case 17:
-                  this.getPage(3);
-                  break;
-                default:
-                  this.getPage(0);
-                  break;
-              }
+            this.getPage(event);
               
-              console.log('on press page');
+            console.log('on press page');
           }}
 
           onSearch={(event) => {
@@ -450,9 +438,9 @@ class StoriesListView extends Component {
           style={styles.listView.list}
           dataSource={this.state.dataSource}
           renderRow={this.renderRow.bind(this)}
-          automaticallyAdjustContentInsets={false}
-          initialListSize={9}
-          //renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+          automaticallyAdjustContentInsets={true}
+          initialListSize={20}
+          renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
           renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.listView.searchBar} />}
         />
         

@@ -27,7 +27,8 @@ module.exports = StyleSheet.create({
   },
   
   list: {
-    height: 1000
+    height: 1200,
+    flex: 1
   },
 
   spinner: {
