@@ -49,19 +49,25 @@ var StoryDetailView = require('./story-detail-view');
 
 
 class SearchBar extends Component {
-
+  
+  constructor(props, context) {
+    super(props, context);
+  };  
   render() {
     return (
       <View style={styles.listView.searchBar}>
-        <TouchableHighlight onPress={this.props.onPage(0)}>
+        <TouchableWithoutFeedback onPress={this.props.onPage}>
           <Text style={styles.listView.navbarButton}>Home</Text>
-        </TouchableHighlight>      
-        <TouchableHighlight>
+        </TouchableWithoutFeedback>      
+        <TouchableWithoutFeedback onPress={this.props.onPage}>
           <Text style={styles.listView.navbarButton}>Page 1</Text>
-        </TouchableHighlight>           
-
-        <Text style={styles.listView.navbarButton}>Page 2</Text>
-        <Text style={styles.listView.navbarButton}>Page 3</Text>
+        </TouchableWithoutFeedback>           
+        <TouchableWithoutFeedback onPress={this.props.onPage}>
+          <Text style={styles.listView.navbarButton}>Page 2</Text>
+        </TouchableWithoutFeedback>   
+        <TouchableWithoutFeedback onPress={this.props.onPage}>
+          <Text style={styles.listView.navbarButton}>Page 3</Text>
+        </TouchableWithoutFeedback>           
 
 
         <TextInput
@@ -86,7 +92,7 @@ class SearchBar extends Component {
 
 class StoriesListView extends Component {
   timeoutID = (null: any);
-  
+  isUpdated = true;
 
   constructor(props, context) {
     super(props, context);
@@ -95,11 +101,11 @@ class StoriesListView extends Component {
       Reference: "xhcmdlLWNhc2gtd2l0aGRyYXdhbC1saW1pdA==",
       Title: "Furious Backlash Forces HSBC To Scrap Large Cash Withdrawal Limit",
       Updated: "2016-03-08T15:55:12.2058442+08:00"} ];
-
+    this.isUpdated = false;
     this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
       isLoading: false,
-      page: 0,
+      page: -1,
       query: '',
       dataSource: this.ds.cloneWithRows(['7 Harsh Realities Of Life Millennials Need To Understand', 'Millennials. They may not yet be the present, but they’re certainly the future. These young, uninitiated minds will someday soon become our politicians, doctors, scientists, chefs, television producers, fashion designers, manufacturers, and, one would hope, the new proponents of liberty. But are they ready for it? It’s time millennials understood these 7 harsh realities of life so we don’t end up with a generation of gutless adult babies running the show.','Japanese Government Bond Futures Are Flash-Crashing (Again)', 'Remember that once-in-a-lifetime, ']),
       resultsData: this.ds.cloneWithRows(['Japanese Government Bond Futures Are Flash-Crashing (Again)', 'Remember that once-in-a-lifetime, '])
@@ -108,11 +114,14 @@ class StoriesListView extends Component {
 
 
   componentDidMount() {
-    //this.getPage('0');
+    this.isUpdated = true;
+    this.getPage('0');    
   };
 
   getDataSource(stories: Array<any>): ListView.DataSource{
+    this.isUpdated = false;
     this.setState({dataSource: this.ds.cloneWithRows(stories)});
+    this.isUpdated = true;
     return this.state.dataSource.cloneWithRows(stories);
   }
 
@@ -190,8 +199,10 @@ class StoriesListView extends Component {
 
   getPage(page){
     this.timeoutID = null;
-
-    this.state.page = page;
+    if (this.isUpdated == false) {
+      return;
+    }
+    
 
 
     var cachedResultsForQuery = resultsCache.dataForQuery[page];
@@ -223,6 +234,7 @@ class StoriesListView extends Component {
         .then((responseData) => {
             this.setSearchGetResult(responseData, page);
             console.log('On Get Page ' + page);
+            this.state.page = page;
           })
     }
   };
@@ -232,6 +244,7 @@ class StoriesListView extends Component {
   {
       var storyItem = resultsStoriesCache.dataForQuery[reference];
       if (storyItem !== undefined && storyItem !== null) {
+        this.isUpdated = false;
         this.props.navigator.push({
           title: 'Story Details',
           component: StoryDetailView,
@@ -386,7 +399,26 @@ class StoriesListView extends Component {
        <SearchBar
           onPage = {(event) => {
             //var searchString = event.nativeEvent.text;
-            this.getPage(event);
+              switch(event.nativeEvent.target)
+              {
+                case 10:
+                  this.getPage(0);
+                  break;
+                case 13:
+                  this.getPage(1);
+                  break;
+                case 15:
+                  this.getPage(2);
+                  break;
+                case 17:
+                  this.getPage(3);
+                  break;
+                default:
+                  this.getPage(0);
+                  break;
+              }
+              
+              console.log('on press page');
           }}
 
           onSearch={(event) => {

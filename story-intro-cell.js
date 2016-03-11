@@ -65,8 +65,8 @@ class StoryIntroCell extends Component {
             <View style={styles.cellTextContainer}>
               <WebView
                 style={{
-                  backgroundColor: BGWASH,
-                  height: 100,
+                  backgroundColor: '#2E6DA4',
+                  height: 30,
                 }}
                 automaticallyAdjustContentInsets={false}
                 source={{html: this.props.story.Title}}
