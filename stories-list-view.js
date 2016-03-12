@@ -170,8 +170,8 @@ class StoriesListView extends Component {
   getStoryAttributes(reference : string) {    
 
     if (this.state.searchMode === true) {
-      for (var i = 0; i < resultsCache.dataForQuery[this.state.page].length; i++) {
-          if (resultsCache.dataForQuery[this.state.page][i].Reference == reference) {
+      for (var i = 0; i < resultsCache.dataForQuery[this.state.query][this.state.page].length; i++) {
+          if (resultsCache.dataForQuery[this.state.query][this.state.page][i].Reference == reference) {
               return i;
           }
       }      
@@ -192,7 +192,7 @@ class StoriesListView extends Component {
     var index = this.getStoryAttributes(reference);
     if (index >= 0) {
       if (this.state.searchMode === true) {
-        var storyItem = resultsCache.dataForQuery[this.state.page][index];
+        var storyItem = resultsCache.dataForQuery[this.state.query][this.state.page][index];
         storyItem.Body = responseData;
 
       } else{
@@ -217,13 +217,14 @@ class StoriesListView extends Component {
     var cachedResultsForQuery = resultsCache.dataForQuery[query];
     if (cachedResultsForQuery === undefined || cachedResultsForQuery === null)
     {
-      resultsCache.dataForQuery[query] = responseData;
+      resultsCache.dataForQuery[query] = { pages: {} };
+      resultsCache.dataForQuery[query].pages[this.state.page] = responseData;
       cachedResultsForQuery = resultsCache.dataForQuery[query];
     }
 
     cachedResultsForQuery[this.state.page] = responseData;
     this.state.isLoading = false;
-    this.state.resultsData = this.getDataSource(resultsCache.dataForQuery[query][this.state.page]);
+    this.state.resultsData = this.getDataSource(resultsCache.dataForQuery[query].pages[this.state.page]);
   };
 
   setPageGetResult(responseData, page){
