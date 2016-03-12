@@ -47,7 +47,7 @@ class WebContainer extends React.Component {
         javaScriptEnabled={true}
         scrollEnabled={false}
         injectedJavaScript={script}
-        source={{html: ( this.props.source.html == undefined ? script : this.props.source.html+script)}}
+        source={{html: ( this.props.source.html == undefined ? '' : this.props.source.html)}}
         onNavigationStateChange={this.onNavigationStateChange.bind(this)} />
     );
   }

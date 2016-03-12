@@ -20,7 +20,8 @@ import React, {
 } from 'react-native';
 
 var styles = require('./styles');
-
+const Dimensions = require('Dimensions');
+const AndroidWindow = Dimensions.get('window');
 var TimerMixin = require('react-timer-mixin');
 
 var API_URL = 'http://www.take5people.cn/ZeroHedge/api/search/';
@@ -34,7 +35,7 @@ var resultsCache = {
 
 
 var resultsPagesCache = {
-  dataForQuery: {}
+  dataForPage: {}
 };
 
 
@@ -57,24 +58,24 @@ class SearchBar extends Component {
   render() {
     return (
       <View style={styles.listView.searchBar}>
-        <TouchableWithoutFeedback id={0} onPress={this.props.onPage.bind(this,0)}>
+        <TouchableHighlight id={0} onPress={this.props.onPage.bind(this,0)}>
           <Text style={styles.listView.navbarButton}>Home</Text>
-        </TouchableWithoutFeedback>      
-        <TouchableWithoutFeedback id={1} onPress={this.props.onPage.bind(this,1)}>
+        </TouchableHighlight>      
+        <TouchableHighlight id={1} onPress={this.props.onPage.bind(this,1)}>
           <Text style={styles.listView.navbarButton}>Page 1</Text>
-        </TouchableWithoutFeedback>           
-        <TouchableWithoutFeedback id={2} onPress={this.props.onPage.bind(this,2)}>
+        </TouchableHighlight>           
+        <TouchableHighlight id={2} onPress={this.props.onPage.bind(this,2)}>
           <Text style={styles.listView.navbarButton}>Page 2</Text>
-        </TouchableWithoutFeedback>   
-        <TouchableWithoutFeedback id={3} onPress={this.props.onPage.bind(this,3)}>
+        </TouchableHighlight>   
+        <TouchableHighlight id={3} onPress={this.props.onPage.bind(this,3)}>
           <Text style={styles.listView.navbarButton}>Page 3</Text>
-        </TouchableWithoutFeedback>           
-        <TouchableWithoutFeedback id={4} onPress={this.props.onPage.bind(this,4)}>
+        </TouchableHighlight>           
+        <TouchableHighlight id={4} onPress={this.props.onPage.bind(this,4)}>
           <Text style={styles.listView.navbarButton}>Page 4</Text>
-        </TouchableWithoutFeedback>      
-        <TouchableWithoutFeedback id={5} onPress={this.props.onPage.bind(this,5)}>
+        </TouchableHighlight>      
+        <TouchableHighlight id={5} onPress={this.props.onPage.bind(this,5)}>
           <Text style={styles.listView.navbarButton}>Page 5</Text>
-        </TouchableWithoutFeedback>      
+        </TouchableHighlight>      
 
         <TextInput
           autoCapitalize='none'
@@ -112,6 +113,7 @@ class StoriesListView extends Component {
     this.state = {
       isLoading: false,
       page: -1,
+      searchMode: false,
       query: '',
       dataSource: this.ds.cloneWithRows(['7 Harsh Realities Of Life Millennials Need To Understand', 'Millennials. They may not yet be the present, but they’re certainly the future. These young, uninitiated minds will someday soon become our politicians, doctors, scientists, chefs, television producers, fashion designers, manufacturers, and, one would hope, the new proponents of liberty. But are they ready for it? It’s time millennials understood these 7 harsh realities of life so we don’t end up with a generation of gutless adult babies running the show.','Japanese Government Bond Futures Are Flash-Crashing (Again)', 'Remember that once-in-a-lifetime, ']),
       resultsData: this.ds.cloneWithRows(['Japanese Government Bond Futures Are Flash-Crashing (Again)', 'Remember that once-in-a-lifetime, '])
@@ -166,12 +168,21 @@ class StoriesListView extends Component {
 
 
   getStoryAttributes(reference : string) {    
-      for (var i = 0; i < resultsCache.dataForQuery[0].length; i++) {
-          if (resultsCache.dataForQuery[0][i].Reference == reference) {
+
+    if (this.state.searchMode === true) {
+      for (var i = 0; i < resultsCache.dataForQuery[this.state.page].length; i++) {
+          if (resultsCache.dataForQuery[this.state.page][i].Reference == reference) {
               return i;
           }
-      }
-      return -1;
+      }      
+    } else{
+      for (var i = 0; i < resultsPagesCache.dataForPage[this.state.page].length; i++) {
+          if (resultsPagesCache.dataForPage[this.state.page][i].Reference == reference) {
+              return i;
+          }
+      }      
+    }
+    return -1;
   }
 
   setStoryGetResult(responseData, reference){
@@ -180,8 +191,15 @@ class StoriesListView extends Component {
     console.log(responseData.length);
     var index = this.getStoryAttributes(reference);
     if (index >= 0) {
-      var storyItem = resultsCache.dataForQuery[0][index];
-      storyItem.Body = responseData;
+      if (this.state.searchMode === true) {
+        var storyItem = resultsCache.dataForQuery[this.state.page][index];
+        storyItem.Body = responseData;
+
+      } else{
+        var storyItem = resultsPagesCache.dataForPage[this.state.page][index];
+        storyItem.Body = responseData;
+
+      }
       resultsStoriesCache.dataForQuery[reference] = storyItem;
     }
     
@@ -194,28 +212,47 @@ class StoriesListView extends Component {
 
     LOADING[query] = false;
     console.log(responseData.length);
-    resultsCache.dataForQuery[query] = responseData;
+
+
+    var cachedResultsForQuery = resultsCache.dataForQuery[query];
+    if (cachedResultsForQuery === undefined || cachedResultsForQuery === null)
+    {
+      resultsCache.dataForQuery[query] = responseData;
+      cachedResultsForQuery = resultsCache.dataForQuery[query];
+    }
+
+    cachedResultsForQuery[this.state.page] = responseData;
+    this.state.isLoading = false;
+    this.state.resultsData = this.getDataSource(resultsCache.dataForQuery[query][this.state.page]);
+  };
+
+  setPageGetResult(responseData, page){
+
+    LOADING[page] = false;
+    console.log(responseData.length);
+    resultsPagesCache.dataForPage[page] = responseData;
 
 
     this.state.isLoading = false;
-    this.state.resultsData = this.getDataSource(resultsCache.dataForQuery[query]);
+    this.state.resultsData = this.getDataSource(resultsPagesCache.dataForPage[page]);
   };
-
 
 
   getPage(page){
     this.timeoutID = null;
+    this.state.searchMode = false;
     if (this.isUpdated == false) {
+      this._showAlert('Download', 'Download page failed');
       return;
     }
     
 
 
-    var cachedResultsForQuery = resultsCache.dataForQuery[page];
-    if (cachedResultsForQuery) {
+    var cachedResultsForPage = resultsPagesCache.dataForPage[page];
+    if (cachedResultsForPage !== undefined && cachedResultsForPage !== null) {
       if (!LOADING[page]) {
         this.state.isLoading = false;
-        this.state.resultsData = this.getDataSource(cachedResultsForQuery);
+        this.state.resultsData = this.getDataSource(cachedResultsForPage);
       } else {
         this.state.isLoading = true;
       }
@@ -224,7 +261,7 @@ class StoriesListView extends Component {
 
 
       LOADING[page] = true;
-      resultsCache.dataForQuery[page] = null;
+      resultsPagesCache.dataForPage[page] = null;
       var settings = {
         method: "GET"
       };      
@@ -232,13 +269,13 @@ class StoriesListView extends Component {
         .then((response) => response.json())
         .catch((error) => {
           LOADING[page] = false;
-          resultsCache.dataForQuery[page] = undefined;
-
+          resultsPagesCache.dataForPage[page] = undefined;
+          this._showAlert('Download', 'Download page failed with error: ' + error);
           this.state.isLoading = false;
           this.state.resultsData = this.getDataSource([])
         })
         .then((responseData) => {
-            this.setSearchGetResult(responseData, page);
+            this.setPageGetResult(responseData, page);
             console.log('On Get Page ' + page);
             this.state.page = page;
           })
@@ -290,7 +327,7 @@ class StoriesListView extends Component {
         .catch((error) => {
           LOADING[reference] = false;
           resultsStoriesCache.dataForQuery[reference] = undefined;
-
+          this._showAlert('Download', 'Download Story failed')
           this.state.isLoading = false;
         })
         .then((responseData) => {
@@ -306,15 +343,17 @@ class StoriesListView extends Component {
 
   searchMedia(query:string){
     this.timeoutID = null;
-
+    this.state.page = 0;
     this.state.query = query;
-
+    this.state.searchMode = true;
 
     var cachedResultsForQuery = resultsCache.dataForQuery[query];
-    if (cachedResultsForQuery) {
+    if (cachedResultsForQuery !== undefined && cachedResultsForQuery[this.state.page] !== undefined
+      && cachedResultsForQuery[this.state.page] !== null)
+    {
       if (!LOADING[query]) {
         this.state.isLoading = false;
-        this.state.resultsData = this.getDataSource(cachedResultsForQuery);
+        this.state.resultsData = this.getDataSource(cachedResultsForQuery[this.state.page]);
       } else {
         this.state.isLoading = true;
       }
@@ -398,6 +437,19 @@ class StoriesListView extends Component {
     // });
   };
 
+  _showAlert(title, message) {
+    console.log('1111111Ask me later pressed');
+    // Works on both iOS and Android
+    Alert.alert(
+      title,
+      message,
+      [
+        {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
+        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ]
+    )    
+  }  
   render() {
     return (
      
@@ -438,10 +490,10 @@ class StoriesListView extends Component {
           style={styles.listView.list}
           dataSource={this.state.dataSource}
           renderRow={this.renderRow.bind(this)}
-          automaticallyAdjustContentInsets={true}
-          initialListSize={20}
-          renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
-          renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.listView.searchBar} />}
+          //automaticallyAdjustContentInsets={true}
+          //initialListSize={20}
+          //renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+          //renderSeparator={(sectionID, rowID) => <View key={`${sectionID}-${rowID}`} style={styles.listView.searchBar} />}
         />
         
       </View>

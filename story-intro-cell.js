@@ -24,15 +24,37 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 1
   },
+
   cellImage: {
     height: 80,
     width: 60,
     marginRight: 8,
     resizeMode: 'contain'
   },
+
   cellTextContainer: {
-    flex: 1
+    flex: 1,
   },
+
+  cellTextPublished: {
+    color: '#000000',
+    flex: 1,
+    fontSize: 10
+  },
+  cellTextTitle: {
+    flex: 1,
+    backgroundColor: '#2E6DA4',
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    height: 40
+  },
+
+  cellTextIntroduction: {
+    flex: 1,
+    backgroundColor: BGWASH,
+    height: 110    
+  },
+
   mediaName: {
     fontSize: 16,
     fontWeight: '600',
@@ -63,6 +85,7 @@ class StoryIntroCell extends Component {
           <View style={styles.cellContainer}>
 
             <View style={styles.cellTextContainer}>
+
               <WebContainer
                 style={{
                   backgroundColor: '#2E6DA4',
@@ -74,10 +97,14 @@ class StoryIntroCell extends Component {
               <WebView
                 style={{
                   backgroundColor: BGWASH,
-                  height: 100
+                  height: 110
                 }}
                 source={{html: this.props.story.Introduction}}
               />   
+              <Text style={styles.cellTextPublished}>
+                {this.props.story.Published}
+              </Text>
+
 
             </View>
           </View>

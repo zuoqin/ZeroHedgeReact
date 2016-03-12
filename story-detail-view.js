@@ -14,22 +14,30 @@ var {
   TextInput,
   TouchableWithoutFeedback,
   ListView,
+  BackAndroid, 
   ProgressBarAndroid,
 } = React;
 
 var styles = require('./styles');
 var StoriesListView = require('./stories-list-view');
 var BGWASH = 'rgba(255,255,255,0.8)';
+const Dimensions = require('Dimensions');
+const AndroidWindow = Dimensions.get('window');
 
 class StoryDetailView extends Component {
+  componentDidMount() {
+      //the '.bind(this)' makes sure 'this' refers to 'StoryDetailView'
+      BackAndroid.addEventListener('hardwareBackPress', function() {
+          this.props.navigator.pop();
+          return true;
+      }.bind(this));
+  }
+
 
   render() {
     return (
       
       <View style={styles.global.content}>
-        <TouchableWithoutFeedback onPress={this._handlePress1.bind(this)}>
-          <Text>HHHHH</Text>
-        </TouchableWithoutFeedback>
           <WebView
             style={{
               backgroundColor: BGWASH,
@@ -42,7 +50,7 @@ class StoryDetailView extends Component {
           <WebView
             style={{
               backgroundColor: BGWASH,
-              height: 4000,
+              height: AndroidWindow.height - 80,
             }}
             automaticallyAdjustContentInsets={true}
             source={{html: this.props.passProps.storyItem.Body}}
@@ -64,5 +72,7 @@ class StoryDetailView extends Component {
   }  
 
 };
+
+
 
 module.exports = StoryDetailView;

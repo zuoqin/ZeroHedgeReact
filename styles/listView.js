@@ -3,13 +3,14 @@ import React, {
   StyleSheet,
 } from 'react-native';
 
-
+const Dimensions = require('Dimensions');
+const AndroidWindow = Dimensions.get('window');
 
 module.exports = StyleSheet.create({
   searchBar: {
-    marginTop: 10,
-    padding: 3,
-    paddingLeft: 8,
+    marginTop: 1,
+    padding: 1,
+    paddingLeft: 3,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFF',
@@ -17,8 +18,9 @@ module.exports = StyleSheet.create({
   searchBarInput: {
     fontSize: 15,
     flex: 1,
-    height: 70,
+    height: 50,
   },
+
 
   navbarButton: {
     width: 50,
@@ -27,7 +29,7 @@ module.exports = StyleSheet.create({
   },
   
   list: {
-    height: 1200,
+    height: AndroidWindow.height - 80,
     flex: 1
   },
 
