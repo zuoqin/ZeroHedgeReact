@@ -92,7 +92,7 @@ class StoryIntroCell extends Component {
                   height: 30
                 }}
                 height={30}
-                source={{html: this.props.story.Title}}
+                source={{html: ('<div style="color:white">' + (this.props.story.Title == undefined ? '':this.props.story.Title) +'</div>')}}
               />              
               <WebView
                 style={{

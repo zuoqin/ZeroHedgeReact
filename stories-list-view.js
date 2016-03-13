@@ -1,5 +1,6 @@
 'use strict';
 import React, {
+  AsyncStorage,
   Alert,
   AppRegistry,
   StyleSheet,
@@ -47,7 +48,7 @@ var resultsStoriesCache = {
 var StoryIntroCell = require('./story-intro-cell');
 var StoryDetailView = require('./story-detail-view');
 
-
+var STORAGE_KEY = '@ZeroHedge:key';
 
 
 class SearchBar extends Component {
@@ -123,8 +124,63 @@ class StoriesListView extends Component {
 
   componentDidMount() {
     this.isUpdated = true;
-    this.getPage('0');    
+    this._loadInitialState().done();
+    this.getPage(0);    
   };
+
+
+
+  async _onValueChange(selectedValue) {    
+    try {
+      for(var i = 0; i < selectedValue.length; i ++)
+      {
+      //selectedValue.forEach(foo,0);
+        //function(item, i, selectedValue) {
+        //  i = i + 1;
+          await AsyncStorage.setItem(STORAGE_KEY+i+'Title', selectedValue[i].Title);
+          await AsyncStorage.setItem(STORAGE_KEY+i+'Introduction', selectedValue[i].Introduction);
+          await AsyncStorage.setItem(STORAGE_KEY+i+'Reference', selectedValue[i].Reference);
+      
+      //  newItem.Title = item.Title;
+      //  newItem.Introduction = item.Introduction;
+      //  newItem.Reference = item.Reference
+      //  newItem.Body = item.Body;
+      //  Results[i] = newItem;
+      };
+      
+    } catch (error) {
+      this._showAlert('Error', 'AsyncStorage error: ' + error.message);
+    }
+  }
+
+  async _loadInitialState() {
+    try {
+      var Results=[];
+      for (var i = 0; i < 10; i++) {
+        var value = await AsyncStorage.getItem(STORAGE_KEY + i +'Title' );
+        if (value !== null && value !== undefined){
+          var newItem = {};
+          newItem.Title = value;
+          value = await AsyncStorage.getItem(STORAGE_KEY + i +'Introduction' );
+          if (value !== null && value !== undefined){
+            newItem.Introduction = value;
+          }
+          value = await AsyncStorage.getItem(STORAGE_KEY + i +'Reference' );
+          if (value !== null && value !== undefined){
+            newItem.Reference = value;
+          }
+          Results.push(newItem);
+
+        }
+      }
+      if (Results.length > 0) {
+        this.setPageGetResult(Results, 0);  
+      }
+      
+    } catch (error) {
+      this._showAlert('Error', 'AsyncStorage error: ' + error.message);
+    }
+  }
 
   getDataSource(stories: Array<any>): ListView.DataSource{
     this.isUpdated = false;
@@ -231,23 +287,36 @@ class StoriesListView extends Component {
 
     LOADING[page] = false;
     console.log(responseData.length);
-    resultsPagesCache.dataForPage[page] = responseData;
+    if (responseData.length == 10) {
+      if (resultsPagesCache.dataForPage[0] === undefined || resultsPagesCache.dataForPage[0] === null) {
+        resultsPagesCache.dataForPage[0] = responseData;
+        this.state.resultsData = this.getDataSource(resultsPagesCache.dataForPage[0]);
+      }      
+    }
+    else{
+      resultsPagesCache.dataForPage[page] = responseData;
+      this._onValueChange(responseData);
 
+      this.state.isLoading = false;
+      this.state.resultsData = this.getDataSource(resultsPagesCache.dataForPage[page]);
 
-    this.state.isLoading = false;
-    this.state.resultsData = this.getDataSource(resultsPagesCache.dataForPage[page]);
+    }
   };
 
 
   getPage(page){
     this.timeoutID = null;
     this.state.searchMode = false;
+    this.state.page = page;    
     if (this.isUpdated == false) {
       this._showAlert('Download', 'Download page failed');
       return;
     }
     
-
+    if (this.state.isLoading == true) {
+      this._showAlert('Download', 'Downloading, please wait...');
+      return;
+    }
 
     var cachedResultsForPage = resultsPagesCache.dataForPage[page];
     if (cachedResultsForPage !== undefined && cachedResultsForPage !== null) {
@@ -268,18 +337,18 @@ class StoriesListView extends Component {
       };      
       fetch(this._urlForPage(page), settings)
         .then((response) => response.json())
-        .catch((error) => {
-          LOADING[page] = false;
-          resultsPagesCache.dataForPage[page] = undefined;
-          this._showAlert('Download', 'Download page failed with error: ' + error);
-          this.state.isLoading = false;
-          this.state.resultsData = this.getDataSource([])
-        })
         .then((responseData) => {
             this.setPageGetResult(responseData, page);
             console.log('On Get Page ' + page);
-            this.state.page = page;
           })
+        .catch((error) => {
+          LOADING[page] = false;
+          resultsPagesCache.dataForPage[page] = undefined;
+          this._showAlert('Download', 'Download page failed with error: ' + error.message);
+          this.state.isLoading = false;
+          this.state.resultsData = this.getDataSource([])
+        })
+
     }
   };
 
@@ -296,14 +365,18 @@ class StoriesListView extends Component {
           passProps: {
             storyItem : storyItem
           }
-        });        
+        });
+        this.isUpdated = true;
       }
   };
 
   getStory(reference){
     this.timeoutID = null;
 
-    //this.state.story = reference;
+    if (this.state.isLoading == true) {
+      this._showAlert('Download', 'Downloading, please wait...');
+      return;
+    }
 
 
     var cachedResultsForQuery = resultsStoriesCache.dataForQuery[reference];
@@ -347,6 +420,11 @@ class StoriesListView extends Component {
     this.state.page = 0;
     this.state.query = query;
     this.state.searchMode = true;
+
+    if (this.state.isLoading == true) {
+      this._showAlert('Download', 'Downloading, please wait...');
+      return;
+    }
 
     var cachedResultsForQuery = resultsCache.dataForQuery[query];
     if (cachedResultsForQuery !== undefined && cachedResultsForQuery[this.state.page] !== undefined
@@ -445,8 +523,6 @@ class StoriesListView extends Component {
       title,
       message,
       [
-        {text: 'Ask me later', onPress: () => console.log('Ask me later pressed')},
-        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
         {text: 'OK', onPress: () => console.log('OK Pressed')},
       ]
     )    

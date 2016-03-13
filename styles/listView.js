@@ -13,23 +13,27 @@ module.exports = StyleSheet.create({
     paddingLeft: 3,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: '#101010',
   },
   searchBarInput: {
     fontSize: 15,
     flex: 1,
     height: 50,
+    backgroundColor: '#FFF', // 40% opaque
+    borderRadius: 10,
+    borderColor: '#F0F',
+    borderWidth: 4
   },
 
 
   navbarButton: {
     width: 50,
-    color: '#000000',
+    color: '#FFFFFF',
     textAlign: 'center'
   },
   
   list: {
-    height: AndroidWindow.height - 80,
+    height: AndroidWindow.height - 75,
     flex: 1
   },
 
