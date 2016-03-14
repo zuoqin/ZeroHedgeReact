@@ -15,6 +15,12 @@ module.exports = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#101010',
   },
+
+  touchableButton: {
+    shadowColor: '#999999',
+
+  },
+
   searchBarInput: {
     fontSize: 15,
     flex: 1,

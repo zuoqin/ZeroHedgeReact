@@ -14,6 +14,7 @@ import React, {
   TouchableHighlight,
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   ListView,
   ScrollView,
   ProgressBarAndroid,
@@ -59,24 +60,24 @@ class SearchBar extends Component {
   render() {
     return (
       <View style={styles.listView.searchBar}>
-        <TouchableHighlight id={0} onPress={this.props.onPage.bind(this,0)}>
+        <TouchableOpacity style={styles.listView.touchableButton} onPress={this.props.onPage.bind(this,0)}>
           <Text style={styles.listView.navbarButton}>Home</Text>
-        </TouchableHighlight>      
-        <TouchableHighlight id={1} onPress={this.props.onPage.bind(this,1)}>
+        </TouchableOpacity>      
+        <TouchableOpacity style={styles.listView.touchableButton} onPress={this.props.onPage.bind(this,1)}>
           <Text style={styles.listView.navbarButton}>Page 1</Text>
-        </TouchableHighlight>           
-        <TouchableHighlight id={2} onPress={this.props.onPage.bind(this,2)}>
+        </TouchableOpacity>           
+        <TouchableOpacity style={styles.listView.touchableButton} onPress={this.props.onPage.bind(this,2)}>
           <Text style={styles.listView.navbarButton}>Page 2</Text>
-        </TouchableHighlight>   
-        <TouchableHighlight id={3} onPress={this.props.onPage.bind(this,3)}>
+        </TouchableOpacity>   
+        <TouchableOpacity style={styles.listView.touchableButton} onPress={this.props.onPage.bind(this,3)}>
           <Text style={styles.listView.navbarButton}>Page 3</Text>
-        </TouchableHighlight>           
-        <TouchableHighlight id={4} onPress={this.props.onPage.bind(this,4)}>
+        </TouchableOpacity>           
+        <TouchableOpacity style={styles.listView.touchableButton} onPress={this.props.onPage.bind(this,4)}>
           <Text style={styles.listView.navbarButton}>Page 4</Text>
-        </TouchableHighlight>      
-        <TouchableHighlight id={5} onPress={this.props.onPage.bind(this,5)}>
+        </TouchableOpacity>      
+        <TouchableOpacity style={styles.listView.touchableButton} onPress={this.props.onPage.bind(this,5)}>
           <Text style={styles.listView.navbarButton}>Page 5</Text>
-        </TouchableHighlight>      
+        </TouchableOpacity>      
 
         <TextInput
           autoCapitalize='none'
