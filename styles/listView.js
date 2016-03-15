@@ -39,7 +39,7 @@ module.exports = StyleSheet.create({
   },
   
   list: {
-    height: AndroidWindow.height - 75,
+    height: AndroidWindow.height - 77,
     flex: 1
   },
 

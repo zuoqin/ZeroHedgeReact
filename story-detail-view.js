@@ -39,18 +39,21 @@ class StoryDetailView extends Component {
       
       <View style={styles.global.content}>
           <WebView
+
             style={{
+              padding: 0,
               backgroundColor: '#2E6DA4',
               height: 50,
             }}
-            source={{html: ('<div  style="color:white" align="center">' + this.props.passProps.storyItem.Title + '</div>')}}
+            source={{html: ('<div  style="font-size:18px; padding: 0; color:white" align="center">' + 
+              this.props.passProps.storyItem.Title + '</div>')}}
             scalesPageToFit={true}
             automaticallyAdjustContentInsets={true}
           />    
           <WebView
             style={{
               backgroundColor: BGWASH,
-              height: AndroidWindow.height - 50,
+              height: AndroidWindow.height - 70,
             }}
             automaticallyAdjustContentInsets={true}
             source={{html: this.props.passProps.storyItem.Body}}

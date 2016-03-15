@@ -135,18 +135,10 @@ class StoriesListView extends Component {
     try {
       for(var i = 0; i < selectedValue.length; i ++)
       {
-      //selectedValue.forEach(foo,0);
-        //function(item, i, selectedValue) {
-        //  i = i + 1;
           await AsyncStorage.setItem(STORAGE_KEY+i+'Title', selectedValue[i].Title);
           await AsyncStorage.setItem(STORAGE_KEY+i+'Introduction', selectedValue[i].Introduction);
           await AsyncStorage.setItem(STORAGE_KEY+i+'Reference', selectedValue[i].Reference);
-      
-      //  newItem.Title = item.Title;
-      //  newItem.Introduction = item.Introduction;
-      //  newItem.Reference = item.Reference
-      //  newItem.Body = item.Body;
-      //  Results[i] = newItem;
+          await AsyncStorage.setItem(STORAGE_KEY+i+'Published', selectedValue[i].Published);
       };
       
     } catch (error) {
@@ -169,6 +161,10 @@ class StoriesListView extends Component {
           value = await AsyncStorage.getItem(STORAGE_KEY + i +'Reference' );
           if (value !== null && value !== undefined){
             newItem.Reference = value;
+          }
+          value = await AsyncStorage.getItem(STORAGE_KEY + i +'Published' );
+          if (value !== null && value !== undefined){
+            newItem.Published = value;
           }
           Results.push(newItem);
 
