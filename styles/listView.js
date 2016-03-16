@@ -18,24 +18,27 @@ module.exports = StyleSheet.create({
 
   touchableButton: {
     shadowColor: '#999999',
-
+    paddingLeft: 1,
+    paddingRight: 1,
   },
 
   searchBarInput: {
     fontSize: 15,
     flex: 1,
-    height: 50,
+    height: 30,
+    padding: 3,
     backgroundColor: '#FFF', // 40% opaque
     borderRadius: 10,
     borderColor: '#F0F',
-    borderWidth: 4
+    borderWidth: 10,
+    borderStyle: 'solid'
   },
 
 
   navbarButton: {
     width: 50,
     color: '#FFFFFF',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   
   list: {

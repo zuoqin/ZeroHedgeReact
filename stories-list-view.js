@@ -62,23 +62,22 @@ class SearchBar extends Component {
       <View style={styles.listView.searchBar}>
         <TouchableOpacity style={styles.listView.touchableButton} onPress={this.props.onPage.bind(this,0)}>
           <Text style={styles.listView.navbarButton}>Home</Text>
-        </TouchableOpacity>      
+        </TouchableOpacity>
         <TouchableOpacity style={styles.listView.touchableButton} onPress={this.props.onPage.bind(this,1)}>
           <Text style={styles.listView.navbarButton}>Page 1</Text>
-        </TouchableOpacity>           
+        </TouchableOpacity>
         <TouchableOpacity style={styles.listView.touchableButton} onPress={this.props.onPage.bind(this,2)}>
           <Text style={styles.listView.navbarButton}>Page 2</Text>
-        </TouchableOpacity>   
+        </TouchableOpacity>
         <TouchableOpacity style={styles.listView.touchableButton} onPress={this.props.onPage.bind(this,3)}>
           <Text style={styles.listView.navbarButton}>Page 3</Text>
-        </TouchableOpacity>           
+        </TouchableOpacity>
         <TouchableOpacity style={styles.listView.touchableButton} onPress={this.props.onPage.bind(this,4)}>
           <Text style={styles.listView.navbarButton}>Page 4</Text>
-        </TouchableOpacity>      
+        </TouchableOpacity>
         <TouchableOpacity style={styles.listView.touchableButton} onPress={this.props.onPage.bind(this,5)}>
           <Text style={styles.listView.navbarButton}>Page 5</Text>
-        </TouchableOpacity>      
-
+        </TouchableOpacity>
         <TextInput
           autoCapitalize='none'
           autoCorrect={false}
