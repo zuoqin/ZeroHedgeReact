@@ -26,9 +26,9 @@ const Dimensions = require('Dimensions');
 const AndroidWindow = Dimensions.get('window');
 var TimerMixin = require('react-timer-mixin');
 
-var API_URL = 'http://www.take5people.cn/ZeroHedge/api/search/';
-var PAGE_URL = 'http://www.take5people.cn/ZeroHedge/api/page/';
-var STORY_URL = 'http://www.take5people.cn/ZeroHedge/api/story/';
+var API_URL = 'http://www.take5people.cn:8083/api/search/';
+var PAGE_URL = 'http://www.take5people.cn:8083/api/page/';
+var STORY_URL = 'http://www.take5people.cn:8083/api/story/';
 
 var LOADING = {};
 var resultsCache = {

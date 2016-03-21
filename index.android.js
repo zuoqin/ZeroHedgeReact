@@ -1,7 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
 import React, {
   Alert,
@@ -21,34 +17,6 @@ import React, {
 
 var StoryDetailView = require('./story-detail-view');
 
-const HTML = `
-<!DOCTYPE html>\n
-<html>
-  <head>
-    <title>Hello Static World</title>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=320, user-scalable=no">
-    <style type="text/css">
-      body {
-        margin: 0;
-        padding: 0;
-        font: 62.5% arial, sans-serif;
-        background: #ccc;
-      }
-      h1 {
-        padding: 45px;
-        margin: 0;
-        text-align: center;
-        color: #33f;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Hello Static World</h1>
-  </body>
-</html>
-`;
-
 var HEADER = '#3b5998';
 
 var DISABLED_WASH = 'rgba(255,255,255,0.25)';
@@ -65,13 +33,13 @@ class ZeroHedge extends Component {
       var routeId = route.id;
 
 
-      var storyItem = {
-        Body:'"<p>"Okay, Donnie, you win.&nbsp; I’m moving out.&nbsp; Not moving out of the country — not yet anyway. I’m merely moving out of one of New York’s many buildings slathered in equal portions with gratuitous gold and the name “Trump.” Nine largely happy years with an excellent staff and an excellent reputation (until recently, anyway) — but I’m out of here."</p> "',
-        Title: 'Keith Olbermann Unleashes On Donald Trump: &quot;I Am Moving Out Of Your Building&quot;',
-        Introduction: '<p>"Okay, Donnie, you win.&nbsp; I’m moving out.&n…l recently, anyway) — but I’m out of here."</p>',
-        Updated: '2016-03-10T13:28:31.9412500+08:00',
-        Reference: 'aHR0cDovL3d3dy56ZXJvaGVkZ2UuY29tL25ld3MvMjAxNi0wMy0wOS9rZWl0aC1vbGJlcm1hbm4tcHVuaXNoZXMtZG9uYWxkLXRydW1wLWktYW0tbW92aW5nLW91dC15b3VyLWJ1aWxkaW5n'        
-     }
+     // var storyItem = {
+     //   Body:'"<p>"Okay, Donnie, you win.&nbsp; I’m moving out.&nbsp; Not moving out of the country — not yet anyway. I’m merely moving out of one of New York’s many buildings slathered in equal portions with gratuitous gold and the name “Trump.” Nine largely happy years with an excellent staff and an excellent reputation (until recently, anyway) — but I’m out of here."</p> "',
+     //   Title: 'Keith Olbermann Unleashes On Donald Trump: &quot;I Am Moving Out Of Your Building&quot;',
+     //   Introduction: '<p>"Okay, Donnie, you win.&nbsp; I’m moving out.&n…l recently, anyway) — but I’m out of here."</p>',
+     //   Updated: '2016-03-10T13:28:31.9412500+08:00',
+     //   Reference: 'aHR0cDovL3d3dy56ZXJvaGVkZ2UuY29tL25ld3MvMjAxNi0wMy0wOS9rZWl0aC1vbGJlcm1hbm4tcHVuaXNoZXMtZG9uYWxkLXRydW1wLWktYW0tbW92aW5nLW91dC15b3VyLWJ1aWxkaW5n'
+     //}
      if (routeId === 'StoriesList') {
          return (
           <StoriesListView
@@ -162,7 +130,6 @@ class ZeroHedge extends Component {
   }  
 }
 
-var styles = require('./styles');
 //var navbarStyle = require('./styles/navbar');
 //var globalStyle = require('./styles/global');
 
