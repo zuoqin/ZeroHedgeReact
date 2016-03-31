@@ -97,7 +97,7 @@ class StoryDetailView extends Component {
     }
     
     var sTitle = this.props.passProps.storyItem.Title;
-    if(navState.title.length > 0)
+    if(navState.title.length > 0 && navState.title.indexOf('take5people') < 0 && navState.title !== 'Zero Hedge')
       sTitle = navState.title;
 
     this.setState({
