@@ -30,6 +30,11 @@ var API_URL = 'http://www.take5people.cn:8083/api/search/';
 var PAGE_URL = 'http://www.take5people.cn:8083/api/page/';
 var STORY_URL = 'http://www.take5people.cn:8083/api/story/';
 
+// var API_URL = 'http://192.168.123.118:8083/api/search/';
+// var PAGE_URL = 'http://192.168.123.118:8083/api/page/';
+// var STORY_URL = 'http://192.168.123.118:8083/api/story/';
+
+
 var LOADING = {};
 var resultsCache = {
   dataForQuery: {}
@@ -354,6 +359,7 @@ class StoriesListView extends Component {
       var storyItem = resultsStoriesCache.dataForQuery[reference];
       if (storyItem !== undefined && storyItem !== null) {
         this.isUpdated = false;
+        this.state.isLoading = false;
         this.props.navigator.push({
           title: 'Story Details',
           component: StoryDetailView,
@@ -363,6 +369,7 @@ class StoriesListView extends Component {
           }
         });
         this.isUpdated = true;
+        this.state.isLoading = false;
       }
   };
 
@@ -370,7 +377,7 @@ class StoriesListView extends Component {
     this.timeoutID = null;
 
     if (this.state.isLoading == true) {
-      this._showAlert('Download', 'Downloading, please wait...');
+      this._showAlert('Download', 'Downloading story, please wait...');
       return;
     }
 
@@ -386,7 +393,7 @@ class StoriesListView extends Component {
     } else{
       this.state.isLoading = true;
 
-
+      this._showAlert('Download', 'Will load the story, please wait...');
       LOADING[reference] = true;
       resultsStoriesCache.dataForQuery[reference] = null;
       var settings = {
@@ -500,16 +507,16 @@ class StoriesListView extends Component {
   };
 
   selectMediaItem(storyItem) {
-    this.getStory(storyItem.Reference);
+    //this.getStory(storyItem.Reference);
 
-    // this.props.navigator.push({
-    //   title: 'Story Details',
-    //   component: StoryDetailView,
-    //   id: 'StoryDetail',
-    //   passProps: {
-    //     storyItem
-    //   }
-    // });
+    this.props.navigator.push({
+      title: 'Story Details',
+      component: StoryDetailView,
+      id: 'StoryDetail',
+      passProps: {
+        storyItem
+      }
+    });
   };
 
   _showAlert(title, message) {
