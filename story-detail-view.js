@@ -1,11 +1,9 @@
 'use strict';
-
-var React = require('react-native');
-var {
+import React, { Component } from 'react';
+import {
   Alert,
   AppRegistry,
   StyleSheet,
-  Component,
   Text,
   View,
   WebView,
@@ -15,8 +13,11 @@ var {
   TouchableWithoutFeedback,
   ListView,
   BackAndroid, 
-  ProgressBarAndroid,
-} = React;
+  ProgressBarAndroid
+} from 'react-native';
+
+
+
 
 var styles = require('./styles');
 var StoriesListView = require('./stories-list-view');
@@ -41,6 +42,7 @@ class StoryDetailView extends Component {
         {
           if (references.length < 1) {
             //this._showAlert("jhh333333", "3333kjhkhjkhjkh");
+            BackAndroid.removeEventListener('hardwareBackPress', this.handleBackPress);
             this.props.navigator.pop();
           }
           else

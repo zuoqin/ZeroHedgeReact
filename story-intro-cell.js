@@ -1,9 +1,11 @@
 'use strict';
-import React, {
+
+
+import React, { Component } from 'react';
+import {
   Alert,
   AppRegistry,
   StyleSheet,
-  Component,
   Text,
   View,
   WebView,
@@ -16,6 +18,7 @@ import React, {
   TouchableHighlight,
   Image,
 } from 'react-native';
+
 
 var styles = StyleSheet.create({
   cellContainer: {

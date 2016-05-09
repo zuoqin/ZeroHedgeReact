@@ -1,10 +1,11 @@
 'use strict';
-import React, {
+
+import React, { Component } from 'react';
+import {
   AsyncStorage,
   Alert,
   AppRegistry,
   StyleSheet,
-  Component,
   Text,
   View,
   WebView,
@@ -339,7 +340,7 @@ class StoriesListView extends Component {
       fetch(this._urlForPage(page), settings)
         .then((response) => response.json())
         .then((responseData) => {
-            this.setPageGetResult(responseData, page);
+            this.setPageGetResult(responseData.Data, page);
             console.log('On Get Page ' + page);
           })
         .catch((error) => {

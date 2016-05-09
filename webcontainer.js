@@ -1,7 +1,17 @@
 'use strict';
 
-import React from 'react-native';
-let { WebView } = React;
+import React, { Component } from 'react';
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View,
+  WebView
+} from 'react-native';
+
+
+
+
 import _ from 'lodash';
 
 const script = '<script>window.location.hash = 1;document.title = document.height;</script>';

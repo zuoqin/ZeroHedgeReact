@@ -1,9 +1,11 @@
 'use strict';
-import React, {
+import React, { Component } from 'react';
+
+
+import {
   Alert,
   AppRegistry,
   StyleSheet,
-  Component,
   Text,
   View,
   WebView,
@@ -14,6 +16,10 @@ import React, {
   ListView,
   ProgressBarAndroid,
 } from 'react-native';
+
+
+
+
 
 var StoryDetailView = require('./story-detail-view');
 
