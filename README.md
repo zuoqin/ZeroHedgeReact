@@ -6,3 +6,4 @@ ZeroHedge Android version implemented in React Native
 2. gradlew assembleRelease
 3. D:\Android\android-sdk\platform-tools\adb devices
 4. D:\Android\android-sdk\platform-tools\adb reverse tcp:8081 tcp:8081
+5 ![alt tag](https://github.com/zuoqin/ZeroHedgeReact/blob/master/AVD.png)
