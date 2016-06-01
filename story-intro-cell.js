@@ -104,11 +104,14 @@ class StoryIntroCell extends Component {
                 }}
                 source={{html: this.props.story.Introduction}}
               />   
-              <Text style={styles.cellTextPublished}>
-                {this.props.story.Published}
-              </Text>
 
-
+              <WebView
+                style={{
+                  backgroundColor: BGWASH,
+                  height: 30
+                }}
+                source={{html: this.props.story.Published}}
+              />
             </View>
           </View>
         </TouchableHighlight>
