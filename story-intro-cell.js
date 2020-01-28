@@ -8,7 +8,6 @@ import {
   StyleSheet,
   Text,
   View,
-  WebView,
   StatusBar,
   Navigator,
   TextInput,
@@ -19,7 +18,8 @@ import {
   Image,
 } from 'react-native';
 
-
+import { Dimensions } from 'react-native'
+import { WebView } from 'react-native-webview';
 var styles = StyleSheet.create({
   cellContainer: {
     flexDirection: 'row',
@@ -55,7 +55,7 @@ var styles = StyleSheet.create({
   cellTextIntroduction: {
     flex: 1,
     backgroundColor: BGWASH,
-    height: 110    
+    height: 110
   },
 
   mediaName: {
@@ -74,7 +74,22 @@ var styles = StyleSheet.create({
 });
 
 var BGWASH = 'rgba(255,255,255,0.8)';
-var WebContainer = require('./webcontainer');
+
+class MyWeb extends Component {
+  render() {
+    return (
+      <WebView
+        style={{
+          backgroundColor: BGWASH,
+        }}
+
+        source={{uri: this.props.picture}}
+      />
+    );
+  }
+}
+
+
 class StoryIntroCell extends Component {
 
   render() {
@@ -89,28 +104,35 @@ class StoryIntroCell extends Component {
 
             <View style={styles.cellTextContainer}>
 
-              <WebContainer
+              <WebView
                 style={{
                   backgroundColor: '#2E6DA4',
-                  height: 30
+                  height: this.props.story.title.length > 100 ? 70 : (this.props.story.title.length > 50 ? 50 :30),
                 }}
-                height={30}
-                source={{html: ('<div style="color:white">' + (this.props.story.Title == undefined ? '':this.props.story.Title) +'</div>')}}
-              />              
-              <WebView
-                style={{
-                  backgroundColor: BGWASH,
-                  height: 110
-                }}
-                source={{html: this.props.story.Introduction}}
-              />   
+                scalesPageToFit={true}
+                viewportContent={'width=device-width, user-scalable=no'}
+                source={{html: ('<div style="color:white; word-wrap: break-word; font-size: 250%">' + (this.props.story.title == undefined ? '':this.props.story.title) +'</div>')}}
+              />
 
+              <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-start'}}>
+              <Image
+                style={{width: 100, height: 50}}
+                source={{uri: this.props.story.picture}}
+                />
+                <WebView
+                  style={{
+                    backgroundColor: BGWASH,
+                    height: 50
+                  }}
+                  source={{html: ('<h1 >' + this.props.story.introduction + '</h1>')}}
+                />
+              </View>
               <WebView
                 style={{
                   backgroundColor: BGWASH,
                   height: 30
                 }}
-                source={{html: this.props.story.Published}}
+                source={{html: this.props.story.updated}}
               />
             </View>
           </View>
