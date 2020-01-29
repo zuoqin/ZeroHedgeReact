@@ -115,10 +115,12 @@ class StoryIntroCell extends Component {
               />
 
               <View style={{flex: 1, flexDirection: 'row', alignItems: 'flex-start'}}>
-              <Image
-                style={{width: 100, height: 50}}
-                source={{uri: this.props.story.picture}}
-                />
+              {this.props.story.picture != undefined ?
+                <Image
+                  style={{width: 100, height: 50}}
+                  source={{uri: this.props.story.picture}}
+                  /> : null
+              }
                 <WebView
                   style={{
                     backgroundColor: BGWASH,
